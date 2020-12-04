@@ -68,7 +68,7 @@ VALUES
 
 INSERT INTO date_timings(timing_id, date_id)
 VALUES
-(2, 1),
+(1, 1),
 (3, 2),
 (1, 3),
 (2, 3),

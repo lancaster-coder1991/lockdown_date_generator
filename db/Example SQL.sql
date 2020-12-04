@@ -1,0 +1,2 @@
+SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id WHERE date_timings.timing_id=2; --Selects all afternon dates from date table
+SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id JOIN date_categories ON dates.date_id=date_categories.date_id WHERE date_timings.timing_id=2 AND date_categories.category_id=1; --Selects all afternoon Food and Drink dates from the date table

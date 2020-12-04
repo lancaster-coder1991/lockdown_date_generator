@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/lancaster-coder1991/lockdown_date_generator/issues"
   },
-  "homepage": "https://github.com/lancaster-coder1991/lockdown_date_generator#readme"
+  "homepage": "https://github.com/lancaster-coder1991/lockdown_date_generator#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1"
+  }
 }
