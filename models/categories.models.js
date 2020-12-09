@@ -1,20 +1,11 @@
-const { Client } = require("pg");
-
-const client = new Client({
-  user: "george",
-  host: "localhost",
-  database: "lockdown_dates",
-  password: "georgescott123",
-  port: 5432,
-});
+const pool = require("../db_connect");
 
 exports.fetchCategories = () => {
-  client.connect();
-  const executeQuery = async () => {
-    return await client.query("SELECT * FROM categories;").then((res) => {
-      client.end();
+  return pool.connect().then((client) => {
+    client.query("SELECT * FROM categories;").then((res) => {
+      console.log("model response:", res);
+      client.release();
       return res.rows;
     });
-  };
-  return executeQuery();
+  });
 };

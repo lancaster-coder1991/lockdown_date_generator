@@ -1,22 +1,11 @@
 const app = require("../app");
 const request = require("supertest");
-const { Client } = require("pg");
+const pool = require("../db_connect");
 
-// const client = new Client({
-//   user: "george",
-//   host: "localhost",
-//   database: "lockdown_dates",
-//   password: "georgescott123",
-//   port: 5432,
-// });
-
-// beforeAll(() => {
-//   client.connect();
-// });
-
-// afterAll(() => {
-//   client.end();
-// });
+afterAll(() => {
+  console.log("closing connection");
+  pool.end();
+});
 
 describe("/api", () => {
   it("GET requests to /api receive a 200 status and placeholder response", () => {
@@ -30,14 +19,39 @@ describe("/api", () => {
       });
   });
   describe("/categories", () => {
-    it("GET /categories should return a 200 and a categories object with an array of categories", () => {
+    it.only("GET /categories should return a 200 and a categories object with an array of categories", () => {
       return request(app)
         .get("/api/categories")
         .expect(200)
         .then((res) => {
+          console.log(res);
           expect(typeof res.body).toBe("object");
           expect(Array.isArray(res.body.categories)).toBe(true);
           expect(res.body.categories.length).toBeTruthy();
+        });
+    });
+  });
+  describe("/timings", () => {
+    it("GET /timings should return a 200 and a timings object with an array of timings", () => {
+      return request(app)
+        .get("/api/timings")
+        .expect(200)
+        .then((res) => {
+          expect(typeof res.body).toBe("object");
+          expect(Array.isArray(res.body.timings)).toBe(true);
+          expect(res.body.timings.length).toBeTruthy();
+        });
+    });
+  });
+  describe("/dates", () => {
+    it("GET /dates should return a 200 and a dates object with an array of dates", () => {
+      return request(app)
+        .get("/api/dates")
+        .expect(200)
+        .then((res) => {
+          expect(typeof res.body).toBe("object");
+          expect(Array.isArray(res.body.dates)).toBe(true);
+          expect(res.body.dates.length).toBeTruthy();
         });
     });
   });
