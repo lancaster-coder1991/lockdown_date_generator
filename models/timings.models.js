@@ -1,11 +1,10 @@
 const pool = require("../db_connect");
 
 exports.fetchTimings = () => {
-  pool.connect();
-  const executeQuery = async () => {
-    return await pool.query("SELECT * FROM timings;").then((res) => {
+  return pool.connect().then((client) => {
+    return client.query("SELECT * FROM timings;").then((res) => {
+      client.release();
       return res.rows;
     });
-  };
-  return executeQuery();
+  });
 };

@@ -19,12 +19,12 @@ describe("/api", () => {
       });
   });
   describe("/categories", () => {
-    it.only("GET /categories should return a 200 and a categories object with an array of categories", () => {
+    it("GET /categories should return a 200 and a categories object with an array of categories", () => {
       return request(app)
         .get("/api/categories")
         .expect(200)
         .then((res) => {
-          console.log(res);
+          console.log(res.body.categories);
           expect(typeof res.body).toBe("object");
           expect(Array.isArray(res.body.categories)).toBe(true);
           expect(res.body.categories.length).toBeTruthy();
@@ -52,6 +52,14 @@ describe("/api", () => {
           expect(typeof res.body).toBe("object");
           expect(Array.isArray(res.body.dates)).toBe(true);
           expect(res.body.dates.length).toBeTruthy();
+        });
+    });
+    it.only("GET /dates should accept a sort query that can sort timings by morning/afternoon/evening", () => {
+      return request(app)
+        .get("/api/dates?sort_by=timings")
+        .expect(200)
+        .then((res) => {
+          expect(res.body.dates).toBeSortedBy("timing_id");
         });
     });
   });
