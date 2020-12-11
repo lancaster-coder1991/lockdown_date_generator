@@ -24,7 +24,6 @@ describe("/api", () => {
         .get("/api/categories")
         .expect(200)
         .then((res) => {
-          console.log(res.body.categories);
           expect(typeof res.body).toBe("object");
           expect(Array.isArray(res.body.categories)).toBe(true);
           expect(res.body.categories.length).toBeTruthy();
@@ -62,13 +61,26 @@ describe("/api", () => {
           expect(res.body.dates).toBeSortedBy("timing_id");
         });
     });
-    it.only("GET /dates should accept a categories sort query that sorts results alphabetically by category", () => {
+    it("GET /dates should accept a categories sort query that sorts results alphabetically by category", () => {
       return request(app)
         .get("/api/dates?sort_by=categories")
         .expect(200)
         .then((res) => {
           expect(res.body.dates).toBeSortedBy("category_name");
         });
+    });
+    it.only("GET /dates should accept timing and category parameters that filter results accordingly", () => {
+      return Promise.all([
+        request(app).get("/api/dates/filter/timings/Evening").expect(200),
+        request(app).get("/api/dates/filter/categories/Outdoors").expect(200),
+      ]).then(([timingRes, categoryRes]) => {
+        expect(timingRes.body.dates.every((date) => date.timing_id === 3)).toBe(
+          true
+        );
+        expect(
+          categoryRes.body.dates.every((date) => date.category_id === 2)
+        ).toBe(true);
+      });
     });
   });
 });
