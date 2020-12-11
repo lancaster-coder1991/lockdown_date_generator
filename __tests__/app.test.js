@@ -54,12 +54,20 @@ describe("/api", () => {
           expect(res.body.dates.length).toBeTruthy();
         });
     });
-    it.only("GET /dates should accept a sort query that can sort timings by morning/afternoon/evening", () => {
+    it("GET /dates should accept a timings sort query that sorts results by morning/afternoon/evening", () => {
       return request(app)
         .get("/api/dates?sort_by=timings")
         .expect(200)
         .then((res) => {
           expect(res.body.dates).toBeSortedBy("timing_id");
+        });
+    });
+    it.only("GET /dates should accept a categories sort query that sorts results alphabetically by category", () => {
+      return request(app)
+        .get("/api/dates?sort_by=categories")
+        .expect(200)
+        .then((res) => {
+          expect(res.body.dates).toBeSortedBy("category_name");
         });
     });
   });
