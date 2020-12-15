@@ -6,20 +6,23 @@ CREATE DATABASE lockdown_dates;
 
 CREATE TABLE timings(
     timing_id SERIAL PRIMARY KEY,
-    timing_name VARCHAR not null,
-    timing_description VARCHAR not null
+    timing_name VARCHAR NOT NULL,
+    timing_description VARCHAR not null,
+    UNIQUE(timing_name)
 );
 
 CREATE TABLE categories(
     category_id SERIAL PRIMARY KEY,
     category_name VARCHAR not null,
-    category_description VARCHAR not null
+    category_description VARCHAR not null,
+    UNIQUE(category_name)
 );
 
 CREATE TABLE dates(
     date_id SERIAL PRIMARY KEY,
     date_name VARCHAR not null,
-    date_description VARCHAR not null
+    date_description VARCHAR not null,
+    UNIQUE(date_name)
 );
 
 CREATE TABLE date_timings(

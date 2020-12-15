@@ -50,3 +50,17 @@ exports.fetchDates = (query, param) => {
       console.log(err);
     });
 };
+
+exports.insertDate = (date) => {
+  return pool.connect().then((client) => {
+    const datesQueryStr = `INSERT INTO dates(date_name, date_description) VALUES('${date.date_name}', '${date.date_description}') RETURNING *`;
+    const timingsQueries = date.timings.map(
+      (timing) => `SELECT timing_id FROM timings WHERE timing_name='${timing}'`
+    );
+    console.log(timingsQueries);
+    return client.query(datesQueryStr).then((res) => {
+      client.release();
+      return res.rows[0];
+    });
+  });
+};

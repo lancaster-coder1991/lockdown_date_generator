@@ -99,5 +99,20 @@ describe("/api", () => {
         expect(categoriesFilter.body.dates).toBeSortedBy("timing_id");
       });
     });
+    it.only("POST /dates should insert a new row into the dates table, as well as the appropriate junction tables", () => {
+      return request(app)
+        .post("/api/dates")
+        .send({
+          date_name: "Book Club",
+          date_description: "something about a book club",
+          timings: ["Morning", "Afternoon", "Evening"],
+          categories: ["Social"],
+        })
+        .expect("Content-Type", /json/)
+        .expect(201)
+        .then(({ body }) => {
+          console.log(body);
+        });
+    });
   });
 });
