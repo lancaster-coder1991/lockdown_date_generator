@@ -69,7 +69,7 @@ describe("/api", () => {
           expect(res.body.dates).toBeSortedBy("category_name");
         });
     });
-    it.only("GET /dates should accept timing and category parameters that filter results accordingly", () => {
+    it("GET /dates should accept timing and category parameters that filter results accordingly", () => {
       return Promise.all([
         request(app).get("/api/dates/filter/timings/Evening").expect(200),
         request(app).get("/api/dates/filter/categories/Outdoors").expect(200),
@@ -80,6 +80,23 @@ describe("/api", () => {
         expect(
           categoryRes.body.dates.every((date) => date.category_id === 2)
         ).toBe(true);
+      });
+    });
+    it("GET /dates should be able to use sort queries and filter parameters together", () => {
+      return Promise.all([
+        request(app).get(
+          "/api/dates/filter/timings/Evening?sort_by=categories"
+        ),
+        request(app).get("/api/dates/filter/categories/Games?sort_by=timings"),
+      ]).then(([timingsFilter, categoriesFilter]) => {
+        expect(
+          timingsFilter.body.dates.every((date) => date.timing_id === 3)
+        ).toBe(true);
+        expect(timingsFilter.body.dates).toBeSortedBy("category_name");
+        expect(
+          categoriesFilter.body.dates.every((date) => date.category_id === 3)
+        ).toBe(true);
+        expect(categoriesFilter.body.dates).toBeSortedBy("timing_id");
       });
     });
   });

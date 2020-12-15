@@ -1,12 +1,26 @@
-const e = require("express");
 const pool = require("../db_connect");
 
 exports.fetchDates = (query, param) => {
   const { sort_by } = query;
+  const paramFilter = Object.keys(param)[0];
   return pool
     .connect()
     .then((client) => {
-      if (sort_by) {
+      if (sort_by && paramFilter) {
+        const filter =
+          paramFilter === "timing"
+            ? `timings.timing_name='${param[paramFilter]}'`
+            : `categories.category_name='${param[paramFilter]}'`;
+        const orderBy =
+          sort_by === "timings"
+            ? "timings.timing_id"
+            : "categories.category_name";
+        const queryStr = `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id JOIN timings ON date_timings.timing_id=timings.timing_id JOIN date_categories ON dates.date_id=date_categories.date_id JOIN categories ON date_categories.category_id=categories.category_id WHERE ${filter} ORDER BY ${orderBy}`;
+        return client.query(queryStr).then((res) => {
+          client.release();
+          return res.rows;
+        });
+      } else if (sort_by) {
         const queryStr =
           sort_by === "timings"
             ? `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id ORDER BY timing_id;`
@@ -15,16 +29,13 @@ exports.fetchDates = (query, param) => {
           client.release();
           return res.rows;
         });
-      } else if (Object.keys(param)[0]) {
-        const filterKey = Object.keys(param)[0];
-        const filterName = param[filterKey];
+      } else if (paramFilter) {
+        const filterName = param[paramFilter];
         const queryStr =
-          filterKey === "timing"
+          paramFilter === "timing"
             ? `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id JOIN timings ON date_timings.timing_id=timings.timing_id WHERE timing_name='${filterName}'`
             : `SELECT * FROM dates JOIN date_categories ON dates.date_id=date_categories.date_id JOIN categories ON date_categories.category_id=categories.category_id WHERE category_name='${filterName}'`;
-        console.log(queryStr);
         return client.query(queryStr).then((res) => {
-          console.log(res.rows);
           client.release();
           return res.rows;
         });
