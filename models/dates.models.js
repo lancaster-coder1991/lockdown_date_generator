@@ -54,13 +54,46 @@ exports.fetchDates = (query, param) => {
 exports.insertDate = (date) => {
   return pool.connect().then((client) => {
     const datesQueryStr = `INSERT INTO dates(date_name, date_description) VALUES('${date.date_name}', '${date.date_description}') RETURNING *`;
-    const timingsQueries = date.timings.map(
-      (timing) => `SELECT timing_id FROM timings WHERE timing_name='${timing}'`
+    const timingsQueries = date.timings.map((timing) =>
+      client.query(
+        `SELECT timing_id FROM timings WHERE timing_name='${timing}'`
+      )
     );
-    console.log(timingsQueries);
-    return client.query(datesQueryStr).then((res) => {
-      client.release();
-      return res.rows[0];
-    });
+    return Promise.all(timingsQueries)
+      .then((resArr) => {
+        const timingIDs = resArr.map((res) => res.rows[0].timing_id);
+        const categoriesQueries = date.categories.map((category) =>
+          client.query(
+            `SELECT category_id FROM categories WHERE category_name='${category}'`
+          )
+        );
+        console.log(categoriesQueries);
+        return Promise.all([categoriesQueries, timingIDs]);
+      })
+      .then(([categoryResponses, timingIDs]) => {
+        console.log(categoryResponses);
+        const categoryIDs = categoryResponses.map(
+          (res) => res.rows[0].category_id
+        );
+        return Promise.all([
+          client.query(datesQueryStr),
+          categoryIDs,
+          timingIDs,
+        ]);
+      })
+      .then(([insertDateResponse, categoryIDs, timingIDs]) => {
+        const insertDateTimingQueries = timingIDs.map(
+          (ID) =>
+            `INSERT INTO date_timings(timing_id, date_id) VALUES(${ID}, ${insertDateResponse.rows[0].date_id})`
+        );
+        console.log(insertDateTimingQueries);
+      })
+      .then((resArr) => {
+        client.release();
+        return resArr[0].rows[0];
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   });
 };
