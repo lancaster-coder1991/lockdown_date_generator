@@ -1,0 +1,1 @@
+This project is a WIP of a generator for dates for couples stuck in the house during lockdown! This repo is a backend featuring an SQL database created in Postgres, and a server created in Express.js. More info coming soon!
