@@ -99,6 +99,14 @@ describe("/api", () => {
         expect(categoriesFilter.body.dates).toBeSortedBy("timing_id");
       });
     });
+    it.only("GET /dates/:date_id should return the correct date", () => {
+      return request(app)
+        .get("/api/dates/1")
+        .expect(200)
+        .then((res) => {
+          expect(res.body.date_id).toBe(1);
+        });
+    });
     it("POST /dates should insert a new row into the dates table, as well as the appropriate junction tables", () => {
       return request(app)
         .post("/api/dates")

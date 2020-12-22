@@ -1,4 +1,8 @@
-const { fetchDates, insertDate } = require("../models/dates.models");
+const {
+  fetchDates,
+  fetchDateById,
+  insertDate,
+} = require("../models/dates.models");
 
 exports.getDates = (req, res, next) => {
   fetchDates(req.query, req.params)
@@ -8,6 +12,14 @@ exports.getDates = (req, res, next) => {
     .catch((err) => {
       next(err);
     });
+};
+
+exports.getDateById = (req, res, next) => {
+  const id = req.params[Object.keys(req.params)[0]];
+  fetchDateById(id).then((date) => {
+    console.log(date.rows[0]);
+    res.status(200).send(date.rows[0]);
+  });
 };
 
 exports.postDate = (req, res, next) => {

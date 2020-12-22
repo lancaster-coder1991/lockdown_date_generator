@@ -51,6 +51,17 @@ exports.fetchDates = (query, param) => {
     });
 };
 
+exports.fetchDateById = (id) => {
+  return pool.connect().then((client) => {
+    return client
+      .query(`SELECT * FROM dates WHERE date_id=${id}`)
+      .then((res) => {
+        client.release();
+        return res;
+      });
+  });
+};
+
 exports.insertDate = (date) => {
   return pool.connect().then((client) => {
     const datesQueryStr = `INSERT INTO dates(date_name, date_description) VALUES('${date.date_name}', '${date.date_description}') RETURNING *`;
