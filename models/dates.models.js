@@ -67,14 +67,13 @@ exports.insertDate = (date) => {
             `SELECT category_id FROM categories WHERE category_name='${category}'`
           )
         );
-        console.log(categoriesQueries);
-        return Promise.all([categoriesQueries, timingIDs]);
+        return Promise.all([...categoriesQueries, timingIDs]);
       })
-      .then(([categoryResponses, timingIDs]) => {
-        console.log(categoryResponses);
-        const categoryIDs = categoryResponses.map(
-          (res) => res.rows[0].category_id
-        );
+      .then((response) => {
+        const timingIDs = response[response.length - 1];
+        const categoryIDs = response
+          .slice(0, response.length - 1)
+          .map((res) => res.rows[0].category_id);
         return Promise.all([
           client.query(datesQueryStr),
           categoryIDs,
@@ -82,15 +81,25 @@ exports.insertDate = (date) => {
         ]);
       })
       .then(([insertDateResponse, categoryIDs, timingIDs]) => {
-        const insertDateTimingQueries = timingIDs.map(
-          (ID) =>
-            `INSERT INTO date_timings(timing_id, date_id) VALUES(${ID}, ${insertDateResponse.rows[0].date_id})`
+        const insertDateTimingQueries = timingIDs.map((ID) =>
+          client.query(
+            `INSERT INTO date_timings(timing_id, date_id) VALUES(${ID}, ${insertDateResponse.rows[0].date_id}) RETURNING *`
+          )
         );
-        console.log(insertDateTimingQueries);
+        const insertDateCategoryQueries = categoryIDs.map((ID) =>
+          client.query(
+            `INSERT INTO date_categories(category_id, date_id) VALUES(${ID}, ${insertDateResponse.rows[0].date_id}) RETURNING *`
+          )
+        );
+        return Promise.all([
+          insertDateResponse,
+          ...insertDateTimingQueries,
+          ...insertDateCategoryQueries,
+        ]);
       })
       .then((resArr) => {
         client.release();
-        return resArr[0].rows[0];
+        return resArr;
       })
       .catch((err) => {
         console.log(err);

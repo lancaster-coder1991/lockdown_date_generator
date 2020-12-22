@@ -12,8 +12,8 @@ exports.getDates = (req, res, next) => {
 
 exports.postDate = (req, res, next) => {
   insertDate(req.body)
-    .then((insertedRow) => {
-      res.status(201).send({ body: insertedRow });
+    .then((response) => {
+      res.status(201).send(response);
     })
     .catch((err) => {
       next(err);

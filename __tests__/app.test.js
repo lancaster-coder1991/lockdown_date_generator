@@ -99,7 +99,7 @@ describe("/api", () => {
         expect(categoriesFilter.body.dates).toBeSortedBy("timing_id");
       });
     });
-    it.only("POST /dates should insert a new row into the dates table, as well as the appropriate junction tables", () => {
+    it("POST /dates should insert a new row into the dates table, as well as the appropriate junction tables", () => {
       return request(app)
         .post("/api/dates")
         .send({
@@ -111,7 +111,12 @@ describe("/api", () => {
         .expect("Content-Type", /json/)
         .expect(201)
         .then(({ body }) => {
-          console.log(body);
+          expect(body[0].rows[0].date_name).toBe("Book Club");
+          expect(body[0].rows[0].date_description).toBe(
+            "something about a book club"
+          );
+          expect(body[1].rows[0].date_id).toBe(body[0].rows[0].date_id);
+          expect(body[2].rows[0].date_id).toBe(body[0].rows[0].date_id);
         });
     });
   });
