@@ -9,6 +9,10 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api", apiRouter);
-app.use(handle404EntryNotFound);
+
+app.use((err, req, res, next) => {
+  //why doesn't this work?
+  console.log("hi from the app");
+});
 
 module.exports = app;
