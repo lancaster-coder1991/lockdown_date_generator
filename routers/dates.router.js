@@ -10,6 +10,5 @@ datesRouter.route("/").get(getDates).post(postDate);
 datesRouter.route("/:date_id").get(getDateById);
 datesRouter.route("/filter/timings/:timing").get(getDates);
 datesRouter.route("/filter/categories/:category").get(getDates);
-datesRouter.use("/*", handle404NotFound);
 
 module.exports = datesRouter;
