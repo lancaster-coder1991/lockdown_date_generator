@@ -99,12 +99,20 @@ describe("/api", () => {
         expect(categoriesFilter.body.dates).toBeSortedBy("timing_id");
       });
     });
-    it.only("GET /dates/:date_id should return the correct date", () => {
+    it("GET /dates/:date_id should return the correct date when passed a valid date id that exists in the DB", () => {
       return request(app)
         .get("/api/dates/1")
         .expect(200)
         .then((res) => {
           expect(res.body.date_id).toBe(1);
+        });
+    });
+    it.only("GET /dates/:date_id should return a 404 and an 'entry not found' message if passed a valid id but no date is found in the DB", () => {
+      return request(app)
+        .get("/api/dates/29847291847")
+        .expect(404)
+        .then((res) => {
+          expect(res.body.message).toBe("entry not found");
         });
     });
     it("POST /dates should insert a new row into the dates table, as well as the appropriate junction tables", () => {

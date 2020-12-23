@@ -16,10 +16,13 @@ exports.getDates = (req, res, next) => {
 
 exports.getDateById = (req, res, next) => {
   const id = req.params[Object.keys(req.params)[0]];
-  fetchDateById(id).then((date) => {
-    console.log(date.rows[0]);
-    res.status(200).send(date.rows[0]);
-  });
+  fetchDateById(id)
+    .then((date) => {
+      res.status(200).send(date.rows[0]);
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
 
 exports.postDate = (req, res, next) => {

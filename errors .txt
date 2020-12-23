@@ -1,0 +1,5 @@
+400 bad request if invalid id is passed
+400 if invalid query value is passed
+400 if invalid body is posted (either invalid properties, or invalid values)
+404 if valid id is passed but no date found (may need hard coding)
+404 if path not found
