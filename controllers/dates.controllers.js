@@ -43,7 +43,7 @@ exports.postDate = (req, res, next) => {
     throw "Invalid body keys";
   else if (
     !body.date_name ||
-    body.date_name.match(/(\w||\s)+/).length !== body.date_name.length ||
+    body.date_name.match(/(\w||\s)+/)[0].length !== body.date_name.length ||
     !body.timings.every(
       (timing) =>
         timing === "Morning" || timing === "Afternoon" || timing === "Evening"
@@ -59,7 +59,7 @@ exports.postDate = (req, res, next) => {
   )
     throw "Invalid body values";
 
-  insertDate(req.body)
+  insertDate(body)
     .then((response) => {
       res.status(201).send(response);
     })

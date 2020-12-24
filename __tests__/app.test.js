@@ -114,7 +114,7 @@ describe("/dates", () => {
         expect(res.body.msg).toBe("entry not found");
       });
   });
-  it.only("POST /dates should insert a new row into the dates table, as well as the appropriate junction tables", () => {
+  it("POST /dates should insert a new row into the dates table, as well as the appropriate junction tables", () => {
     return request(app)
       .post("/api/dates")
       .send({
@@ -134,7 +134,7 @@ describe("/dates", () => {
         expect(body[2].rows[0].date_id).toBe(body[0].rows[0].date_id);
       });
   });
-  it("POST /dates should return a 400 bad request if a body with invalid values is passed ", () => {
+  it("POST /dates should return a 400 bad request if a body with invalid values is passed", () => {
     return request(app)
       .post("/api/dates")
       .send({
@@ -150,5 +150,19 @@ describe("/dates", () => {
         );
       });
   });
-  it("should ", () => {});
+  it.only("POST /dates should return a 400 bad request if a body with invalid keys is passed", () => {
+    return request(app)
+      .post("/api/dates")
+      .send({
+        date_nawdaw: "Book Club",
+        date_descwdription: "something about a book club",
+        timings: ["Morning", "Afternoon", "Evening"],
+      })
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe(
+          "Invalid body keys, please amend your request."
+        );
+      });
+  });
 });
