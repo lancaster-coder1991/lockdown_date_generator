@@ -8,12 +8,14 @@ afterAll(() => {
 });
 
 describe("/api", () => {
-  it.only("requests to paths that don't exist receive a 404 with a custom response", () => {
+  it("requests to paths that don't exist receive a 404 with a custom response", () => {
     return request(app)
       .get("/api/nothing")
       .expect(404)
       .then((res) => {
-        console.log(res);
+        expect(
+          "Path not found - please consult the documentation for valid paths."
+        );
       });
   });
 });
@@ -132,4 +134,21 @@ describe("/dates", () => {
         expect(body[2].rows[0].date_id).toBe(body[0].rows[0].date_id);
       });
   });
+  it.only("POST /dates should return a 400 bad request if a body with invalid values is passed ", () => {
+    return request(app)
+      .post("/api/dates")
+      .send({
+        date_name: "9438?!3",
+        date_description: "test",
+        timings: ["Afternoon", "Evening"],
+        categories: ["Games"],
+      })
+      .expect(400)
+      .then((res) => {
+        expect(res.msg).toBe(
+          "Invalid property values passed - please amend your request body."
+        );
+      });
+  });
+  it("should ", () => {});
 });
