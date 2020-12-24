@@ -40,13 +40,25 @@ exports.postDate = (req, res, next) => {
         key === "categories"
     )
   )
-    throw { status: 400, msg: "Invalid body keys, please amend your request." };
+    throw "Invalid body keys";
   else if (
     !body.date_name ||
-      body.date_name.match(/\w+/).length !== body.date_name.length ||
-      
-  ) {
-  }
+    body.date_name.match(/(\w||\s)+/).length !== body.date_name.length ||
+    !body.timings.every(
+      (timing) =>
+        timing === "Morning" || timing === "Afternoon" || timing === "Evening"
+    ) ||
+    !body.categories.every(
+      (category) =>
+        category === "Food and Drink" ||
+        category === "Outdoors" ||
+        category === "Games" ||
+        category === "Streaming" ||
+        category === "Social"
+    )
+  )
+    throw "Invalid body values";
+
   insertDate(req.body)
     .then((response) => {
       res.status(201).send(response);
