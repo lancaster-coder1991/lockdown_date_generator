@@ -16,6 +16,13 @@ exports.getDates = (req, res, next) => {
 
 exports.getDateById = (req, res, next) => {
   const id = req.params[Object.keys(req.params)[0]];
+  if (
+    !id
+      .toString()
+      .split("")
+      .every((character) => /\d/.test(character))
+  )
+    throw "Invalid id";
   fetchDateById(id)
     .then((date) => {
       if (!date.rows.length) return Promise.reject("entry not found");

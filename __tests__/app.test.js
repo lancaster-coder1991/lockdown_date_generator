@@ -114,6 +114,14 @@ describe("/dates", () => {
         expect(res.body.msg).toBe("entry not found");
       });
   });
+  it("GET /dates/:date_id should return a 400 bad request if an invalid id is passed", () => {
+    return request(app)
+      .get("/api/dates/banana")
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("Invalid id, please amend your request.");
+      });
+  });
   it("POST /dates should insert a new row into the dates table, as well as the appropriate junction tables", () => {
     return request(app)
       .post("/api/dates")

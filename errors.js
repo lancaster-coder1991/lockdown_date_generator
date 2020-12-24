@@ -23,5 +23,6 @@ exports.handle400BadRequest = (err, req, res, next) => {
     res
       .status(400)
       .send({ msg: "Invalid body values, please amend your request." });
-  }
+  } else if (err === "Invalid id")
+    res.status(400).send({ msg: "Invalid id, please amend your request." });
 };

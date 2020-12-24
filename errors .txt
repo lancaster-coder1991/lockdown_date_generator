@@ -1,5 +1,5 @@
-400 bad request if invalid id is passed
-400 if invalid query value is passed
+400 bad request if invalid id is passed - done
+400 if invalid query value is passed 
 400 if invalid body is posted (either invalid properties, or invalid values) - done
 404 if valid id is passed but no date found (may need hard coding) - done
 404 if path not found - done
