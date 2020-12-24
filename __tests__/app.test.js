@@ -150,7 +150,7 @@ describe("/dates", () => {
         );
       });
   });
-  it.only("POST /dates should return a 400 bad request if a body with invalid keys is passed", () => {
+  it("POST /dates should return a 400 bad request if a body with invalid keys is passed", () => {
     return request(app)
       .post("/api/dates")
       .send({

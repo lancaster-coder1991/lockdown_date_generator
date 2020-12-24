@@ -30,8 +30,8 @@ exports.postDate = (req, res, next) => {
   const { body } = req;
   const keys = Object.keys(body);
   if (
-    keys.length !== 4 &&
-    new Set(keys).size !== keys.length &&
+    keys.length !== 4 ||
+    new Set(keys).size !== keys.length ||
     !keys.every(
       (key) =>
         key === "date_name" ||
