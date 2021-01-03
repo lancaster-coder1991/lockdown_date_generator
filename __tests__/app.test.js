@@ -70,6 +70,14 @@ describe("/dates", () => {
         expect(res.body.dates).toBeSortedBy("category_name");
       });
   });
+  it("GET /dates should return a 400 if an invalid sort query value is requested", () => {
+    return request(app)
+      .get("/api/dates?sort_by=bananas")
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("Invalid query, please amend your request.");
+      });
+  });
   it("GET /dates should accept timing and category parameters that filter results accordingly", () => {
     return Promise.all([
       request(app).get("/api/dates/filter/timings/Evening").expect(200),
