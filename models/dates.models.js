@@ -15,7 +15,7 @@ exports.fetchDates = (query, param, order) => {
           sort_by === "timings"
             ? "timings.timing_id"
             : "categories.category_name";
-        const queryStr = `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id JOIN timings ON date_timings.timing_id=timings.timing_id JOIN date_categories ON dates.date_id=date_categories.date_id JOIN categories ON date_categories.category_id=categories.category_id WHERE ${filter} ORDER BY ${orderBy}`;
+        const queryStr = `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id JOIN timings ON date_timings.timing_id=timings.timing_id JOIN date_categories ON dates.date_id=date_categories.date_id JOIN categories ON date_categories.category_id=categories.category_id WHERE ${filter} ORDER BY ${orderBy} ${order}`;
         return client.query(queryStr).then((res) => {
           client.release();
           return res.rows;

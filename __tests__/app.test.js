@@ -108,7 +108,7 @@ describe("/dates", () => {
         expect(res.body.msg).toBe("Invalid query, please amend your request.");
       });
   });
-  it.only("GET /dates should accept timing and category parameters that filter results accordingly and sorts bt date_name in ascending order by default ", () => {
+  it("GET /dates should accept timing and category parameters that filter results accordingly and sorts bt date_name in ascending order by default ", () => {
     return Promise.all([
       request(app).get("/api/dates/filter/timings/Evening").expect(200),
       request(app).get("/api/dates/filter/categories/Outdoors").expect(200),
@@ -159,6 +159,29 @@ describe("/dates", () => {
         categoriesFilter.body.dates.every((date) => date.category_id === 3)
       ).toBe(true);
       expect(categoriesFilter.body.dates).toBeSortedBy("timing_id");
+    });
+  });
+  it("GET /dates should be able to use sort queries and filter parameters together with a descending order_by query", () => {
+    return Promise.all([
+      request(app).get(
+        "/api/dates/filter/timings/Evening?sort_by=categories&&order_by=desc"
+      ),
+      request(app).get(
+        "/api/dates/filter/categories/Games?sort_by=timings&&order_by=desc"
+      ),
+    ]).then(([timingsFilter, categoriesFilter]) => {
+      expect(
+        timingsFilter.body.dates.every((date) => date.timing_id === 3)
+      ).toBe(true);
+      expect(timingsFilter.body.dates).toBeSortedBy("category_name", {
+        descending: true,
+      });
+      expect(
+        categoriesFilter.body.dates.every((date) => date.category_id === 3)
+      ).toBe(true);
+      expect(categoriesFilter.body.dates).toBeSortedBy("timing_id", {
+        descending: true,
+      });
     });
   });
   it("GET /dates/:date_id should return the correct date when passed a valid date id that exists in the DB", () => {
