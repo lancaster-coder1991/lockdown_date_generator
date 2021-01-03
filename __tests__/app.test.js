@@ -55,7 +55,7 @@ describe("/dates", () => {
         expect(res.body.dates).toBeSortedBy("date_name");
       });
   });
-  it.only("GET /dates should be able to be sorted alphabetically in descending order using an order_by query", () => {
+  it("GET /dates should be able to be sorted alphabetically in descending order using an order_by query", () => {
     return request(app)
       .get("/api/dates?order_by=desc")
       .expect(200)
@@ -74,12 +74,30 @@ describe("/dates", () => {
         expect(res.body.dates).toBeSortedBy("timing_id");
       });
   });
+  it("GET /dates timings sort query should be able to sort in descending order", () => {
+    return request(app)
+      .get("/api/dates?sort_by=timings&&order_by=desc")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.dates).toBeSortedBy("timing_id", { descending: true });
+      });
+  });
   it("GET /dates should accept a categories sort query that sorts results alphabetically by category", () => {
     return request(app)
       .get("/api/dates?sort_by=categories")
       .expect(200)
       .then((res) => {
         expect(res.body.dates).toBeSortedBy("category_name");
+      });
+  });
+  it("GET /dates categories sort query should be able to sort in descending order", () => {
+    return request(app)
+      .get("/api/dates?sort_by=categories&&order_by=desc")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.dates).toBeSortedBy("category_name", {
+          descending: true,
+        });
       });
   });
   it("GET /dates should return a 400 if an invalid sort query value is requested", () => {
@@ -90,7 +108,7 @@ describe("/dates", () => {
         expect(res.body.msg).toBe("Invalid query, please amend your request.");
       });
   });
-  it("GET /dates should accept timing and category parameters that filter results accordingly", () => {
+  it.only("GET /dates should accept timing and category parameters that filter results accordingly and sorts bt date_name in ascending order by default ", () => {
     return Promise.all([
       request(app).get("/api/dates/filter/timings/Evening").expect(200),
       request(app).get("/api/dates/filter/categories/Outdoors").expect(200),
@@ -98,9 +116,34 @@ describe("/dates", () => {
       expect(timingRes.body.dates.every((date) => date.timing_id === 3)).toBe(
         true
       );
+      expect(timingRes.body.dates).toBeSortedBy("date_name");
       expect(
         categoryRes.body.dates.every((date) => date.category_id === 2)
       ).toBe(true);
+      expect(categoryRes.body.dates).toBeSortedBy("date_name");
+    });
+  });
+  it("GET /dates timing and category parameter filter requests should accept an order by descending query", () => {
+    return Promise.all([
+      request(app)
+        .get("/api/dates/filter/timings/Evening?order_by=desc")
+        .expect(200),
+      request(app)
+        .get("/api/dates/filter/categories/Outdoors?order_by=desc")
+        .expect(200),
+    ]).then(([timingRes, categoryRes]) => {
+      expect(timingRes.body.dates.every((date) => date.timing_id === 3)).toBe(
+        true
+      );
+      expect(timingRes.body.dates).toBeSortedBy("date_name", {
+        descending: true,
+      });
+      expect(
+        categoryRes.body.dates.every((date) => date.category_id === 2)
+      ).toBe(true);
+      expect(categoryRes.body.dates).toBeSortedBy("date_name", {
+        descending: true,
+      });
     });
   });
   it("GET /dates should be able to use sort queries and filter parameters together", () => {

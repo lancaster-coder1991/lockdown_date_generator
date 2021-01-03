@@ -23,8 +23,8 @@ exports.fetchDates = (query, param, order) => {
       } else if (sort_by) {
         const queryStr =
           sort_by === "timings"
-            ? `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id ORDER BY timing_id;`
-            : `SELECT * FROM dates JOIN date_categories ON dates.date_id=date_categories.date_id JOIN categories on date_categories.category_id=categories.category_id ORDER BY category_name;`;
+            ? `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id ORDER BY timing_id ${order}`
+            : `SELECT * FROM dates JOIN date_categories ON dates.date_id=date_categories.date_id JOIN categories on date_categories.category_id=categories.category_id ORDER BY category_name ${order};`;
         return client.query(queryStr).then((res) => {
           client.release();
           return res.rows;
@@ -33,8 +33,8 @@ exports.fetchDates = (query, param, order) => {
         const filterName = param[paramFilter];
         const queryStr =
           paramFilter === "timing"
-            ? `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id JOIN timings ON date_timings.timing_id=timings.timing_id WHERE timing_name='${filterName}'`
-            : `SELECT * FROM dates JOIN date_categories ON dates.date_id=date_categories.date_id JOIN categories ON date_categories.category_id=categories.category_id WHERE category_name='${filterName}'`;
+            ? `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id JOIN timings ON date_timings.timing_id=timings.timing_id WHERE timing_name='${filterName}' ORDER BY date_name ${order}`
+            : `SELECT * FROM dates JOIN date_categories ON dates.date_id=date_categories.date_id JOIN categories ON date_categories.category_id=categories.category_id WHERE category_name='${filterName}' ORDER BY date_name ${order}`;
         return client.query(queryStr).then((res) => {
           client.release();
           return res.rows;
