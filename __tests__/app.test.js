@@ -105,7 +105,9 @@ describe("/dates", () => {
       .get("/api/dates?sort_by=bananas")
       .expect(400)
       .then((res) => {
-        expect(res.body.msg).toBe("Invalid query, please amend your request.");
+        expect(res.body.msg).toBe(
+          "Invalid query value, please amend your request."
+        );
       });
   });
   it("GET /dates should accept timing and category parameters that filter results accordingly and sorts bt date_name in ascending order by default ", () => {
@@ -192,12 +194,14 @@ describe("/dates", () => {
         expect(res.body.date_id).toBe(1);
       });
   });
-  it.only("GET /dates order_by query should return a 400 if an invalid order value is passed", () => {
+  it("GET /dates order_by query should return a 400 if an invalid order value is passed", () => {
     return request(app)
       .get("/api/dates?order_by=test")
       .expect(400)
       .then((res) => {
-        expect(res.body.msg).toBe("Invalid query, please amend your request.");
+        expect(res.body.msg).toBe(
+          "Invalid query value, please amend your request."
+        );
       });
   });
   it("GET /dates/:date_id should return a 404 and an 'entry not found' message if passed a valid id but no date is found in the DB", () => {

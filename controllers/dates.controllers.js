@@ -6,13 +6,13 @@ const {
 
 exports.getDates = (req, res, next) => {
   if (
-    Object.keys(req.query)[0] === "sort_by" &&
-    Object.values(req.query)[0] !== "timings" &&
-    Object.values(req.query)[0] !== "categories"
+    req.query.sort_by &&
+    req.query.sort_by !== "timings" &&
+    req.query.sort_by !== "categories"
   )
-    throw "invalid query";
+    throw "invalid query value";
   const order = req.query.order_by ? req.query.order_by.toUpperCase() : "ASC";
-  if (order !== "ASC" && order !== "DESC") throw "invalid query";
+  if (order !== "ASC" && order !== "DESC") throw "invalid query value";
   fetchDates(req.query, req.params, order)
     .then((dates) => {
       res.status(200).send({ dates });
