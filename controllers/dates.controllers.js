@@ -12,6 +12,7 @@ exports.getDates = (req, res, next) => {
   )
     throw "invalid query";
   const order = req.query.order_by ? req.query.order_by.toUpperCase() : "ASC";
+  if (order !== "ASC" && order !== "DESC") throw "invalid query";
   fetchDates(req.query, req.params, order)
     .then((dates) => {
       res.status(200).send({ dates });
