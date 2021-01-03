@@ -29,4 +29,8 @@ exports.handle400BadRequest = (err, req, res, next) => {
     res
       .status(400)
       .send({ msg: "Invalid query value, please amend your request." });
+  else if (err === "invalid query key")
+    res
+      .status(400)
+      .send({ msg: "Invalid query key, please amend your request." });
 };

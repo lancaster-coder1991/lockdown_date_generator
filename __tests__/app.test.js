@@ -204,6 +204,16 @@ describe("/dates", () => {
         );
       });
   });
+  it("GET /dates should return a 400 if an invalid query is passed", () => {
+    return request(app)
+      .get("/api/dates?bananas=true")
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe(
+          "Invalid query key, please amend your request."
+        );
+      });
+  });
   it("GET /dates/:date_id should return a 404 and an 'entry not found' message if passed a valid id but no date is found in the DB", () => {
     return request(app)
       .get("/api/dates/29847291847")
