@@ -40,10 +40,12 @@ exports.fetchDates = (query, param) => {
           return res.rows;
         });
       } else {
-        return client.query("SELECT * FROM dates;").then((res) => {
-          client.release();
-          return res.rows;
-        });
+        return client
+          .query("SELECT * FROM dates ORDER BY date_name;")
+          .then((res) => {
+            client.release();
+            return res.rows;
+          });
       }
     })
     .catch((err) => {
