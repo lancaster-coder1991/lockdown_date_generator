@@ -5,15 +5,12 @@ const {
 } = require("../models/dates.models");
 
 exports.getDates = (req, res, next) => {
-  if (
-    req.query.sort_by &&
-    req.query.sort_by !== "timings" &&
-    req.query.sort_by !== "categories"
-  )
+  const sorting = req.query.sort_by ? req.query.sort_by : undefined;
+  if (sorting && sorting !== "timings" && sorting !== "categories")
     throw "invalid query value";
   const order = req.query.order_by ? req.query.order_by.toUpperCase() : "ASC";
   if (order !== "ASC" && order !== "DESC") throw "invalid query value";
-  fetchDates(req.query, req.params, order)
+  fetchDates(sorting, req.params, order)
     .then((dates) => {
       res.status(200).send({ dates });
     })

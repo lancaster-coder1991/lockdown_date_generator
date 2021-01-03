@@ -1,18 +1,17 @@
 const pool = require("../db_connect");
 
-exports.fetchDates = (query, param, order) => {
-  const { sort_by } = query;
+exports.fetchDates = (sorting, param, order) => {
   const paramFilter = Object.keys(param)[0];
   return pool
     .connect()
     .then((client) => {
-      if (sort_by && paramFilter) {
+      if (sorting && paramFilter) {
         const filter =
           paramFilter === "timing"
             ? `timings.timing_name='${param[paramFilter]}'`
             : `categories.category_name='${param[paramFilter]}'`;
         const orderBy =
-          sort_by === "timings"
+          sorting === "timings"
             ? "timings.timing_id"
             : "categories.category_name";
         const queryStr = `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id JOIN timings ON date_timings.timing_id=timings.timing_id JOIN date_categories ON dates.date_id=date_categories.date_id JOIN categories ON date_categories.category_id=categories.category_id WHERE ${filter} ORDER BY ${orderBy} ${order}`;
@@ -20,9 +19,9 @@ exports.fetchDates = (query, param, order) => {
           client.release();
           return res.rows;
         });
-      } else if (sort_by) {
+      } else if (sorting) {
         const queryStr =
-          sort_by === "timings"
+          sorting === "timings"
             ? `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id ORDER BY timing_id ${order}`
             : `SELECT * FROM dates JOIN date_categories ON dates.date_id=date_categories.date_id JOIN categories on date_categories.category_id=categories.category_id ORDER BY category_name ${order};`;
         return client.query(queryStr).then((res) => {
