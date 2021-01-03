@@ -49,22 +49,21 @@ describe("/dates", () => {
       .get("/api/dates")
       .expect(200)
       .then((res) => {
-        console.log(res.body.dates);
         expect(typeof res.body).toBe("object");
         expect(Array.isArray(res.body.dates)).toBe(true);
         expect(res.body.dates.length).toBeTruthy();
         expect(res.body.dates).toBeSortedBy("date_name");
       });
   });
-  it("GET /dates should be able to be sorted alphabetically in descending order using an order_by query", () => {
+  it.only("GET /dates should be able to be sorted alphabetically in descending order using an order_by query", () => {
     return request(app)
-      .get("/api/dates?order_by=descending")
+      .get("/api/dates?order_by=desc")
       .expect(200)
       .then((res) => {
         expect(typeof res.body).toBe("object");
         expect(Array.isArray(res.body.dates)).toBe(true);
         expect(res.body.dates.length).toBeTruthy();
-        expect(res.body.dates).toBeSorted({ descending: true });
+        expect(res.body.dates).toBeSortedBy("date_name", { descending: true });
       });
   });
   it("GET /dates should accept a timings sort query that sorts results by morning/afternoon/evening", () => {

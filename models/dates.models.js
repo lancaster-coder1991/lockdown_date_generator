@@ -1,6 +1,6 @@
 const pool = require("../db_connect");
 
-exports.fetchDates = (query, param) => {
+exports.fetchDates = (query, param, order) => {
   const { sort_by } = query;
   const paramFilter = Object.keys(param)[0];
   return pool
@@ -41,7 +41,7 @@ exports.fetchDates = (query, param) => {
         });
       } else {
         return client
-          .query("SELECT * FROM dates ORDER BY date_name;")
+          .query(`SELECT * FROM dates ORDER BY date_name ${order};`)
           .then((res) => {
             client.release();
             return res.rows;
