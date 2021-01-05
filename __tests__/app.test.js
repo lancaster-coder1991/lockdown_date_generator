@@ -53,6 +53,17 @@ describe("/timings", () => {
         expect(res.body.timings.length).toBeTruthy();
       });
   });
+  it.only("/timings returns a 405 when any method other than GET is requested", () => {
+    return Promise.all([
+      request(app).post("/api/timings").expect(405),
+      request(app).patch("/api/timings").expect(405),
+      request(app).delete("/api/timings").expect(405),
+    ]).then((results) => {
+      expect(
+        results.every((result) => result.body.msg === "Invalid method")
+      ).toBe(true);
+    });
+  });
 });
 describe("/dates", () => {
   it("GET /dates should return a 200 and a dates object with an array of dates sorted alphabetically by date name", () => {
