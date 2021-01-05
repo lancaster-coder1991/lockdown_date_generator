@@ -29,5 +29,8 @@
     "setupFilesAfterEnv": [
       "jest-sorted"
     ]
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.20"
   }
 }
