@@ -30,16 +30,16 @@ describe("/categories", () => {
         expect(res.body.categories.length).toBeTruthy();
       });
   });
-});
-it("/categories returns a 405 when any method other than GET is requested", () => {
-  return Promise.all([
-    request(app).post("/api/categories").expect(405),
-    request(app).patch("/api/categories").expect(405),
-    request(app).delete("/api/categories").expect(405),
-  ]).then((results) => {
-    expect(
-      results.every((result) => result.body.msg === "Invalid method")
-    ).toBe(true);
+  it("/categories returns a 405 when any method other than GET is requested", () => {
+    return Promise.all([
+      request(app).post("/api/categories").expect(405),
+      request(app).patch("/api/categories").expect(405),
+      request(app).delete("/api/categories").expect(405),
+    ]).then((results) => {
+      expect(
+        results.every((result) => result.body.msg === "Invalid method")
+      ).toBe(true);
+    });
   });
 });
 describe("/timings", () => {

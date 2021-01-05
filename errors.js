@@ -33,4 +33,10 @@ exports.handle400BadRequest = (err, req, res, next) => {
     res
       .status(400)
       .send({ msg: "Invalid query key, please amend your request." });
+  else next(err);
+};
+
+exports.handle405s = (req, res, next) => {
+  console.log("handle405s being called");
+  res.status(405).send({ msg: "Invalid method" });
 };
