@@ -2,7 +2,7 @@ DROP DATABASE IF EXISTS lockdown_dates_test;
 
 CREATE DATABASE lockdown_dates_test;
 
-\c lockdown_dates;
+\c lockdown_dates_test;
 
 CREATE TABLE timings(
     timing_id SERIAL PRIMARY KEY,
