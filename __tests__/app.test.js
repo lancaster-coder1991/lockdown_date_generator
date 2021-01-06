@@ -13,7 +13,7 @@ describe("/api", () => {
       .get("/api/nothing")
       .expect(404)
       .then((res) => {
-        expect(
+        expect(res.body.msg).toBe(
           "Path not found - please consult the documentation for valid paths."
         );
       });

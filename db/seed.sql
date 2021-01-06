@@ -1,3 +1,7 @@
+DROP DATABASE IF EXISTS lockdown_dates;
+
+CREATE DATABASE lockdown_dates;
+
 CREATE TABLE timings(
     timing_id SERIAL PRIMARY KEY,
     timing_name VARCHAR NOT NULL,
