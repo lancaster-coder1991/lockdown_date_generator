@@ -19,8 +19,6 @@ const pool =
         port: 5432,
       });
 
-console.log(pool);
+console.log(process.env.CONNEXTION_STRING);
 
 module.exports = pool;
-
-//CONNECTION_STRING=psql://localhost:5432/lockdown_dates_test
