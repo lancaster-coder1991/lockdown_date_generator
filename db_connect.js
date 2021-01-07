@@ -1,5 +1,5 @@
 const { Pool } = require("pg");
-const ENV = process.env.NODE_ENV || "development";
+const ENV = process.env.CONNECTION_STRING ? "development" : "test";
 
 const pool =
   ENV === "development"
@@ -19,4 +19,8 @@ const pool =
         port: 5432,
       });
 
+console.log(pool);
+
 module.exports = pool;
+
+//CONNECTION_STRING=psql://localhost:5432/lockdown_dates_test
