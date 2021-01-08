@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "psql -f ./db/seed_test.sql && CONNEXTION_STRING=psql://localhost:5432/lockdown_dates_test jest",
+    "test": "psql -f ./db/seed_test.sql && connectionString=postgres://george:georgescott123@localhost:5432/lockdown_dates_test jest",
     "start": "node listen.js"
   },
   "repository": {

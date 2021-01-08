@@ -19,7 +19,7 @@ describe("/api", () => {
       });
   });
 });
-describe("/categories", () => {
+describe.only("/categories", () => {
   it("GET /categories should return a 200 and a categories object with an array of categories", () => {
     return request(app)
       .get("/api/categories")
