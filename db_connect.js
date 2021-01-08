@@ -6,11 +6,11 @@ const pool =
   ENV === "development"
     ? new Pool({
         connectionString:
-          "psql://lockdown-date-server.herokuapp.com/lockdown_dates",
+          "psql://zevmkvyudjpark:0f3a725645461813e70a0a8c7ba234cc623e791af45b97b4a1ba34c71070a55a@lockdown-date-server.herokuapp.com/lockdown_dates",
       })
     : new Pool({ connectionString });
 
-console.log({ connectionString });
+console.log("hi");
 
 module.exports = pool;
 
