@@ -4,7 +4,10 @@ const ENV = process.env.CONNECTION_STRING ? "development" : "test";
 
 const pool =
   ENV === "development"
-    ? new Pool("psql://lockdown-date-server.herokuapp.com/lockdown_dates")
+    ? new Pool({
+        connectionString:
+          "psql://lockdown-date-server.herokuapp.com/lockdown_dates",
+      })
     : new Pool({ connectionString });
 
 console.log({ connectionString });
