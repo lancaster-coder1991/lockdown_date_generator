@@ -9,6 +9,4 @@ const pool =
       })
     : new Pool({ connectionString });
 
-console.log(pool);
-
 module.exports = pool;

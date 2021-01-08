@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "psql -f ./db/seed_test.sql && connectionString=process.env['localConnectionString'] jest",
+    "test": "psql -f ./db/seed_test.sql && postgres://george:georgescott123@localhost:5432/lockdown_dates_test jest",
     "start": "node listen.js"
   },
   "repository": {
@@ -20,6 +20,7 @@
   "homepage": "https://github.com/lancaster-coder1991/lockdown_date_generator#readme",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jest": "^26.6.3",
     "jest-sorted": "^1.0.8",

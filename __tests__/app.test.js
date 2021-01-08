@@ -20,7 +20,6 @@ describe("/api", () => {
   });
 });
 describe.only("/categories", () => {
-  console.log(process.env.localConnectionString);
   it("GET /categories should return a 200 and a categories object with an array of categories", () => {
     return request(app)
       .get("/api/categories")
