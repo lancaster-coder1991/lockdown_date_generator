@@ -9,30 +9,37 @@ exports.fetchDates = (timings, categories, sorting, order) => {
           sorting === "timings"
             ? "timings.timing_id"
             : "categories.category_name";
-        const queryStr = `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id JOIN timings ON date_timings.timing_id=timings.timing_id JOIN date_categories ON dates.date_id=date_categories.date_id JOIN categories ON date_categories.category_id=categories.category_id WHERE timings IN (${timings.join(
+        const queryStr = `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id JOIN timings ON date_timings.timing_id=timings.timing_id JOIN date_categories ON dates.date_id=date_categories.date_id JOIN categories ON date_categories.category_id=categories.category_id WHERE timings.timing_name IN (${timings.join(
           ", "
-        )} AND WHERE categories IN (${categories.join(
+        )} AND WHERE categories.category_name IN (${categories.join(
           ", "
         )}) ORDER BY ${orderBy} ${order}`;
         return client.query(queryStr).then((res) => {
           client.release();
           return res.rows;
         });
-      } else if (sorting) {
+      } else if (sorting && timings) {
         const queryStr =
           sorting === "timings"
-            ? `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id ORDER BY timing_id ${order}`
-            : `SELECT * FROM dates JOIN date_categories ON dates.date_id=date_categories.date_id JOIN categories on date_categories.category_id=categories.category_id ORDER BY category_name ${order};`;
+            ? `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id WHERE timings.timing_name IN (${timings.join(
+                ", "
+              )}) ORDER BY timing_id ${order}`
+            : `SELECT * FROM dates JOIN date_categories ON dates.date_id=date_categories.date_id JOIN categories on date_categories.category_id=categories.category_id WHERE timings.timing_name IN (${timings.join(
+                ", "
+              )}) ORDER BY category_name ${order};`;
         return client.query(queryStr).then((res) => {
           client.release();
           return res.rows;
         });
-      } else if (paramFilter) {
-        const filterName = param[paramFilter];
+      } else if (sorting && categories) {
         const queryStr =
-          paramFilter === "timing"
-            ? `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id JOIN timings ON date_timings.timing_id=timings.timing_id WHERE timing_name='${filterName}' ORDER BY date_name ${order}`
-            : `SELECT * FROM dates JOIN date_categories ON dates.date_id=date_categories.date_id JOIN categories ON date_categories.category_id=categories.category_id WHERE category_name='${filterName}' ORDER BY date_name ${order}`;
+          sorting === "timings"
+            ? `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id WHERE categories.category_name IN (${categories.join(
+                ", "
+              )}) ORDER BY timing_id ${order}`
+            : `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id WHERE categories.category_name IN (${categories.join(
+                ", "
+              )}) ORDER BY category_name ${order};`;
         return client.query(queryStr).then((res) => {
           client.release();
           return res.rows;

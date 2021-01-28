@@ -144,8 +144,12 @@ describe("/dates", () => {
   });
   it.only("GET /dates should accept timing and category queries that filter results accordingly and sorts by date_name in ascending order by default ", () => {
     return Promise.all([
-      request(app).get("/api/dates?timings=Evening").expect(200),
-      request(app).get("/api/dates?categories=Outdoors").expect(200),
+      request(app)
+        .get("/api/dates?timings=Evening&timings=Morning")
+        .expect(200),
+      request(app)
+        .get("/api/dates?categories=Outdoors&categories=Social")
+        .expect(200),
     ]).then(([timingRes, categoryRes]) => {
       expect(timingRes.body.dates.every((date) => date.timing_id === 3)).toBe(
         true

@@ -5,7 +5,6 @@ const {
 } = require("../models/dates.models");
 
 exports.getDates = (req, res, next) => {
-  console.log(req.query);
   if (
     Object.keys(req.query).length &&
     !Object.keys(req.query).every(
@@ -14,7 +13,9 @@ exports.getDates = (req, res, next) => {
     )
   )
     throw "invalid query key";
-  const timings = req.query.timings ? req.query.timings : undefined;
+  const timings = Array.isArray(req.query.timings)
+    ? req.query.timings
+    : [req.query.timings];
   if (
     timings &&
     !timings.every(
@@ -23,7 +24,9 @@ exports.getDates = (req, res, next) => {
     )
   )
     throw "invalid timing query value";
-  const categories = req.query.categories ? req.query.categories : undefined;
+  const categories = Array.isArray(req.query.categories)
+    ? req.query.categories
+    : [req.query.categories];
   const sorting = req.query.sort_by ? req.query.sort_by : undefined;
   if (sorting && sorting !== "timings" && sorting !== "categories")
     throw "invalid query value";
