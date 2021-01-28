@@ -23,12 +23,13 @@ exports.getDates = (req, res, next) => {
     )
   )
     throw "invalid timing query value";
+  const categories = req.query.categories ? req.query.categories : undefined;
   const sorting = req.query.sort_by ? req.query.sort_by : undefined;
   if (sorting && sorting !== "timings" && sorting !== "categories")
     throw "invalid query value";
   const order = req.query.order_by ? req.query.order_by.toUpperCase() : "ASC";
   if (order !== "ASC" && order !== "DESC") throw "invalid query value";
-  fetchDates(sorting, req.params, order)
+  fetchDates(timings, categories, sorting, order)
     .then((dates) => {
       res.status(200).send({ dates });
     })

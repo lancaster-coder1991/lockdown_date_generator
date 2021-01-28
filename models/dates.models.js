@@ -1,20 +1,19 @@
 const pool = require("../db_connect");
 
-exports.fetchDates = (sorting, param, order) => {
-  const paramFilter = Object.keys(param)[0];
+exports.fetchDates = (timings, categories, sorting, order) => {
   return pool
     .connect()
     .then((client) => {
-      if (sorting && paramFilter) {
-        const filter =
-          paramFilter === "timing"
-            ? `timings.timing_name='${param[paramFilter]}'`
-            : `categories.category_name='${param[paramFilter]}'`;
+      if (sorting && timings && categories) {
         const orderBy =
           sorting === "timings"
             ? "timings.timing_id"
             : "categories.category_name";
-        const queryStr = `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id JOIN timings ON date_timings.timing_id=timings.timing_id JOIN date_categories ON dates.date_id=date_categories.date_id JOIN categories ON date_categories.category_id=categories.category_id WHERE ${filter} ORDER BY ${orderBy} ${order}`;
+        const queryStr = `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id JOIN timings ON date_timings.timing_id=timings.timing_id JOIN date_categories ON dates.date_id=date_categories.date_id JOIN categories ON date_categories.category_id=categories.category_id WHERE timings IN (${timings.join(
+          ", "
+        )} AND WHERE categories IN (${categories.join(
+          ", "
+        )}) ORDER BY ${orderBy} ${order}`;
         return client.query(queryStr).then((res) => {
           client.release();
           return res.rows;

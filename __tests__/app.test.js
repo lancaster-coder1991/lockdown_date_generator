@@ -218,7 +218,7 @@ describe("/dates", () => {
       });
     });
   });
-  // code invalid timing query value
+  // code invalid timing query value test
   it("GET /dates/filter/:date_id should return the correct date when passed a valid date id that exists in the DB", () => {
     return request(app)
       .get("/api/dates/filter/1")
