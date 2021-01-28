@@ -17,24 +17,24 @@ exports.fetchDates = (timings, categories, sorting, order) => {
           ", "
         )}) ORDER BY ${orderBy} ${order}`;
       } else if (sorting && timings) {
-        console.log("hitting correct else block");
         queryStr =
           sorting === "timings"
-            ? `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id JOIN timings ON date_timings.timing_id=timings.timing_id WHERE timings.timing_name IN (${timings.join(
+            ? `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id JOIN timings ON date_timings.timing_id=timings.timing_id JOIN date_categories ON dates.date_id = date_categories.date_id JOIN categories ON date_categories.category_id = categories.category_id WHERE timings.timing_name IN (${timings.join(
                 ", "
-              )}) ORDER BY timing_id ${order}`
-            : `SELECT * FROM dates JOIN date_categories ON dates.date_id=date_categories.date_id JOIN categories ON date_categories.category_id=categories.category_id WHERE timings.timing_name IN (${timings.join(
+              )}) ORDER BY timings.timing_id ${order}`
+            : `SELECT * FROM dates JOIN date_categories ON dates.date_id=date_categories.date_id JOIN categories ON date_categories.category_id=categories.category_id JOIN date_timings ON dates.date_id=date_timings.date_id JOIN timings ON date_timings.timing_id=timings.timing_id WHERE timings.timing_name IN (${timings.join(
                 ", "
-              )}) ORDER BY category_name ${order};`;
+              )}) ORDER BY categories.category_name ${order};`;
       } else if (sorting && categories) {
+        console.log("hitting correct sorting block");
         queryStr =
           sorting === "timings"
-            ? `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id WHERE categories.category_name IN (${categories.join(
+            ? `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id JOIN timings ON date_timings.timing_id=timings.timing_id JOIN date_categories ON dates.date_id = date_categories.date_id JOIN categories ON date_categories.category_id = categories.category_id WHERE categories.category_name IN (${categories.join(
                 ", "
-              )}) ORDER BY timing_id ${order}`
-            : `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id WHERE categories.category_name IN (${categories.join(
+              )}) ORDER BY timings.timing_id ${order}`
+            : `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id JOIN timings ON date_timings.timing_id=timings.timing_id JOIN date_categories ON dates.date_id = date_categories.date_id JOIN categories ON date_categories.category_id = categories.category_id WHERE categories.category_name IN (${categories.join(
                 ", "
-              )}) ORDER BY category_name ${order};`;
+              )}) ORDER BY categories.category_name ${order};`;
       } else if (timings && categories) {
         queryStr = `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id JOIN timings ON date_timings.timing_id=timings.timing_id JOIN date_categories ON dates.date_id=date_categories.date_id JOIN categories ON date_categories.category_id=categories.category_id WHERE timings.timing_name IN (${timings.join(
           ", "
