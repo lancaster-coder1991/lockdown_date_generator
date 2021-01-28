@@ -1,6 +1,7 @@
 const pool = require("../db_connect");
 
 exports.fetchDates = (timings, categories, sorting, order) => {
+  console.log(timings, categories, sorting);
   return pool
     .connect()
     .then((client) => {
@@ -19,6 +20,7 @@ exports.fetchDates = (timings, categories, sorting, order) => {
           return res.rows;
         });
       } else if (sorting && timings) {
+        console.log("getting to correct else block");
         const queryStr =
           sorting === "timings"
             ? `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id WHERE timings.timing_name IN (${timings.join(
@@ -40,6 +42,14 @@ exports.fetchDates = (timings, categories, sorting, order) => {
             : `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id WHERE categories.category_name IN (${categories.join(
                 ", "
               )}) ORDER BY category_name ${order};`;
+        return client.query(queryStr).then((res) => {
+          client.release();
+          return res.rows;
+        });
+      } else if (sorting) {
+        sorting === "timings"
+          ? `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id ORDER BY timing_id ${order}`
+          : `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id ORDER BY category_id${order}`;
         return client.query(queryStr).then((res) => {
           client.release();
           return res.rows;
