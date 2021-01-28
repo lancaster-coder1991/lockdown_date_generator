@@ -9,7 +9,10 @@ exports.getDates = (req, res, next) => {
     Object.keys(req.query).length &&
     !Object.keys(req.query).every(
       (key) =>
-        key === "sort_by" || key === "order_by" || "timings" || "categories"
+        key === "sort_by" ||
+        key === "order_by" ||
+        key === "timings" ||
+        key === "categories"
     )
   )
     throw "invalid query key";

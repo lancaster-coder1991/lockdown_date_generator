@@ -190,7 +190,7 @@ describe("/dates", () => {
       });
     });
   });
-  it.only("GET /dates should be able to use sort queries and filter parameters together", () => {
+  it("GET /dates should be able to use sort queries and filter parameters together", () => {
     return Promise.all([
       request(app).get(
         "/api/dates?timings=Evening&timings=Morning&sort_by=categories"
@@ -213,13 +213,13 @@ describe("/dates", () => {
       expect(categoriesFilter.body.dates).toBeSortedBy("timing_id");
     });
   });
-  it("GET /dates should be able to use sort queries and filter parameters together with a descending order_by query", () => {
+  it("GET /dates should be able to use sort and filter queries together with a descending order_by query", () => {
     return Promise.all([
       request(app).get(
-        "/api/dates/filter/timings/Evening?sort_by=categories&&order_by=desc"
+        "/api/dates?timings=Evening&sort_by=categories&order_by=desc"
       ),
       request(app).get(
-        "/api/dates/filter/categories/Games?sort_by=timings&&order_by=desc"
+        "/api/dates?categories=Games&sort_by=timings&&order_by=desc"
       ),
     ]).then(([timingsFilter, categoriesFilter]) => {
       expect(
