@@ -13,9 +13,11 @@ exports.getDates = (req, res, next) => {
     )
   )
     throw "invalid query key";
-  const timings = Array.isArray(req.query.timings)
-    ? req.query.timings
-    : [req.query.timings];
+  let timings;
+  if (req.query.timings)
+    timings = Array.isArray(req.query.timings)
+      ? req.query.timings
+      : [req.query.timings];
   if (
     timings &&
     !timings.every(
@@ -24,9 +26,11 @@ exports.getDates = (req, res, next) => {
     )
   )
     throw "invalid timing query value";
-  const categories = Array.isArray(req.query.categories)
-    ? req.query.categories
-    : [req.query.categories];
+  let categories;
+  if (req.query.categories)
+    categories = Array.isArray(req.query.categories)
+      ? req.query.categories
+      : [req.query.categories];
   const sorting = req.query.sort_by ? req.query.sort_by : undefined;
   if (sorting && sorting !== "timings" && sorting !== "categories")
     throw "invalid query value";
