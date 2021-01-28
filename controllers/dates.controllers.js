@@ -5,13 +5,24 @@ const {
 } = require("../models/dates.models");
 
 exports.getDates = (req, res, next) => {
+  console.log(req.query);
   if (
     Object.keys(req.query).length &&
     !Object.keys(req.query).every(
-      (key) => key === "sort_by" || key === "order_by"
+      (key) =>
+        key === "sort_by" || key === "order_by" || "timings" || "categories"
     )
   )
     throw "invalid query key";
+  const timings = req.query.timings ? req.query.timings : undefined;
+  if (
+    timings &&
+    !timings.every(
+      (timing) =>
+        timing === "Morning" || timing === "Afternoon" || timing === "Evening"
+    )
+  )
+    throw "invalid timing query value";
   const sorting = req.query.sort_by ? req.query.sort_by : undefined;
   if (sorting && sorting !== "timings" && sorting !== "categories")
     throw "invalid query value";
