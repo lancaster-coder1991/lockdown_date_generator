@@ -46,7 +46,6 @@ exports.fetchDates = (timings, categories, sorting, order) => {
             ? `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id ORDER BY timing_id ${order}`
             : `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id ORDER BY category_id${order}`;
       } else if (timings) {
-        console.log(timings.join(", "));
         queryStr = `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id JOIN timings ON date_timings.timing_id=timings.timing_id JOIN date_categories ON dates.date_id=date_categories.date_id JOIN categories ON date_categories.category_id=categories.category_id WHERE timing_name IN (${timings.join(
           ", "
         )}) ORDER BY date_name ${order}`;

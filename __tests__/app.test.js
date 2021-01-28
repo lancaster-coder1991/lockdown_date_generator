@@ -151,9 +151,11 @@ describe("/dates", () => {
       //   .get("/api/dates?categories=Outdoors&categories=Social")
       //   .expect(200),
     ]).then(([timingRes, categoryRes]) => {
-      expect(timingRes.body.dates.every((date) => date.timing_id === 3)).toBe(
-        true
-      );
+      expect(
+        timingRes.body.dates.every(
+          (date) => date.timing_id === 3 || date.timing_id === 1
+        )
+      ).toBe(true);
       expect(timingRes.body.dates).toBeSortedBy("date_name");
       // expect(
       //   categoryRes.body.dates.every((date) => date.category_id === 2)
