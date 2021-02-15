@@ -1,7 +1,13 @@
 const pool = require("../db_connect");
 
-exports.fetchDates = (timings, categories, sorting, order) => {
+exports.fetchDates = (name, timings, categories, sorting, order) => {
   console.log(timings, categories, sorting, order);
+  const baseString =
+    "SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id JOIN timings ON date_timings.timing_id=timings.timing_id JOIN date_categories ON dates.date_id=date_categories.date_id JOIN categories ON date_categories.category_id=categories.category_id";
+  const timingsString = `timings.timing_name IN (${timings.join(", ")}`;
+  const categoriesString = `categories.category_name IN (${categories.join(
+    ", "
+  )}`;
   return pool
     .connect()
     .then((client) => {
@@ -26,7 +32,6 @@ exports.fetchDates = (timings, categories, sorting, order) => {
                 ", "
               )}) ORDER BY categories.category_name ${order};`;
       } else if (sorting && categories) {
-        console.log("hitting correct sorting block");
         queryStr =
           sorting === "timings"
             ? `SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id JOIN timings ON date_timings.timing_id=timings.timing_id JOIN date_categories ON dates.date_id = date_categories.date_id JOIN categories ON date_categories.category_id = categories.category_id WHERE categories.category_name IN (${categories.join(

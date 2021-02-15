@@ -13,6 +13,7 @@ exports.getDates = (req, res, next) => {
         key === "order_by" ||
         key === "timings" ||
         key === "categories" ||
+        key === "name"
     )
   )
     throw "invalid query key";
@@ -52,7 +53,7 @@ exports.getDates = (req, res, next) => {
   const order = req.query.order_by ? req.query.order_by.toUpperCase() : "ASC";
   if (order !== "ASC" && order !== "DESC") throw "invalid query value";
 
-  fetchDates(amendedTimings, amendedCategories, sorting, order)
+  fetchDates(req.query.name, amendedTimings, amendedCategories, sorting, order)
     .then((dates) => {
       res.status(200).send({ dates });
     })
