@@ -12,10 +12,11 @@ exports.getDates = (req, res, next) => {
         key === "sort_by" ||
         key === "order_by" ||
         key === "timings" ||
-        key === "categories"
+        key === "categories" ||
     )
   )
     throw "invalid query key";
+
   let timings;
   if (req.query.timings)
     timings = Array.isArray(req.query.timings)
@@ -29,22 +30,28 @@ exports.getDates = (req, res, next) => {
     )
   )
     throw "invalid timing query value";
+
   const amendedTimings = timings
     ? timings.map((timing) => `'${timing}'`)
     : undefined;
+
   let categories;
   if (req.query.categories)
     categories = Array.isArray(req.query.categories)
       ? req.query.categories
       : [req.query.categories];
+
   const amendedCategories = categories
     ? categories.map((category) => `'${category}'`)
     : undefined;
+
   const sorting = req.query.sort_by ? req.query.sort_by : undefined;
   if (sorting && sorting !== "timings" && sorting !== "categories")
     throw "invalid query value";
+
   const order = req.query.order_by ? req.query.order_by.toUpperCase() : "ASC";
   if (order !== "ASC" && order !== "DESC") throw "invalid query value";
+
   fetchDates(amendedTimings, amendedCategories, sorting, order)
     .then((dates) => {
       res.status(200).send({ dates });
