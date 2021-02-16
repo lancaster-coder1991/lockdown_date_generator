@@ -237,12 +237,36 @@ describe("/dates", () => {
     });
   });
   // code invalid timing query value test
-  it("GET /dates/filter/:date_id should return the correct date when passed a valid date id that exists in the DB", () => {
+  it("GET /dates/?date_id=x should return the correct date when passed a valid date id that exists in the DB", () => {
     return request(app)
       .get("/api/dates/filter/1")
       .expect(200)
       .then((res) => {
         expect(res.body.date_id).toBe(1);
+      });
+  });
+  it("GET /dates should allow searching by name via a passed string matching any containing values in dates.date_name column", () => {
+    return request(app)
+      .get("/api/dates?name=Breakfast")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.dates[0].date_name).toBe("Breakfast in Bed");
+      });
+  });
+  it.only("GET /dates should be able to use all of its possible queries together", () => {
+    return request(app)
+      .get(
+        "/api/dates?name=Go&timings=Afternoon&categories=Outdoors&sort_by=categories&order_by=DESC"
+      )
+      .expect(200)
+      .then((res) => {
+        console.log(res.body.dates);
+        expect(
+          res.body.dates.every(
+            (date) =>
+              date.date_name.includes("Go") || date.date_name.includes("go")
+          )
+        ).toBe(true);
       });
   });
   it("GET /dates order_by query should return a 400 if an invalid order value is passed", () => {
@@ -265,7 +289,7 @@ describe("/dates", () => {
         );
       });
   });
-  it("GET /dates/filter/:date_id should return a 404 and an 'entry not found' message if passed a valid id but no date is found in the DB", () => {
+  it("GET /dates/?date_id=x should return a 404 and an 'entry not found' message if passed a valid id but no date is found in the DB", () => {
     return request(app)
       .get("/api/dates/filter/29847291847")
       .expect(404)
@@ -273,7 +297,7 @@ describe("/dates", () => {
         expect(res.body.msg).toBe("entry not found");
       });
   });
-  it("GET /dates/filter/:date_id should return a 400 bad request if an invalid id is passed", () => {
+  it("GET /dates/?date_id=x should return a 400 bad request if an invalid id is passed", () => {
     return request(app)
       .get("/api/dates/filter/banana")
       .expect(400)
