@@ -76,11 +76,12 @@ describe("/dates", () => {
       ).toBe(true);
     });
   });
-  it("GET /dates should return a 200 and a dates object with an array of dates sorted alphabetically by date name", () => {
+  it.only("GET /dates should return a 200 and a dates object with an array of dates sorted alphabetically by date name", () => {
     return request(app)
       .get("/api/dates")
       .expect(200)
       .then((res) => {
+        console.log(res.body.dates);
         expect(typeof res.body).toBe("object");
         expect(Array.isArray(res.body.dates)).toBe(true);
         expect(res.body.dates.length).toBeTruthy();
@@ -253,7 +254,7 @@ describe("/dates", () => {
         expect(res.body.dates[0].date_name).toBe("Breakfast in Bed");
       });
   });
-  it.only("GET /dates should be able to use all of its possible queries together", () => {
+  it("GET /dates should be able to use all of its possible queries together", () => {
     return request(app)
       .get(
         "/api/dates?name=Go&timings=Afternoon&categories=Outdoors&sort_by=categories&order_by=DESC"
@@ -267,6 +268,7 @@ describe("/dates", () => {
               date.date_name.includes("Go") || date.date_name.includes("go")
           )
         ).toBe(true);
+        expect(res.body.dates.length).toBe(2);
       });
   });
   it("GET /dates order_by query should return a 400 if an invalid order value is passed", () => {

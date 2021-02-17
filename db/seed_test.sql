@@ -65,7 +65,7 @@ VALUES
 ('Go for a moonlit walk', 'Why not stretch your legs after your evening meal or before you go to bed, and have a stroll around the block?'), -- Evening / Outdoors
 ('Play some Jackbox with friends!', 'Jackbox games are fun and lightweight games sure to get the crew laughing in no time. Download from Steam and let the chaos commence!'), -- Afternoon + Evening / Games + Social
 ('Online pub quiz', 'Surely we''ve all done a couple of quizzes by now - but there''s a reason for that - they''re an easy way to get people online for a chat for a few hours with some entertainment!'), -- Afternoon + Evening / Games + Social
-('Easy console gaming', 'If you have a console in the house, why not lok up some games that are lightweight and easy to get into for both of you? We suggest trying out something like Overcooked or Worms!'), -- Morning, Afternoon, Evening / Games
+('Easy console gaming', 'If you have a console in the house, why not look up some games that are lightweight and easy to get into for both of you? We suggest trying out something like Overcooked or Worms!'), -- Morning, Afternoon, Evening / Games
 ('Film night with popcorn', 'Pick a movie genre, pick a popcorn flavour, and snuggle up on the sofa for the evening to enjoy a couple of films!'), -- Evening / Streaming, Food and Drink
 ('Netflix binge', 'There''s so many Netflix exclusives out there it''s hard to keep track! Lockdown is the perfect time to catch up on any you''ve missed - stick on a season and engross yourself for a few hours!'); --Morning, Afternoon, Evening / Streaming
 
