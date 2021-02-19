@@ -21,14 +21,28 @@ exports.fetchDates = (name, timings, categories, sorting, order) => {
   return pool
     .connect()
     .then((client) => {
-      return client
-        .query(
-          "SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id JOIN timings ON date_timings.timing_id=timings.timing_id JOIN date_categories ON dates.date_id=date_categories.date_id JOIN categories ON date_categories.category_id=categories.category_id "
-        )
-        .then((res) => {
-          client.release();
-          return res.rows;
-        });
+      let queryStr = "";
+      if (name && timings && categories) {
+        queryStr = `WHERE ${nameString} AND ${timingsString} AND ${categoriesString}`;
+      } else if (name && timings) {
+        queryStr = `WHERE ${nameString} AND ${timingsString}`;
+      } else if (name && categories) {
+        queryStr = `WHERE ${nameString} AND ${categoriesString}`;
+      } else if (timings && categories) {
+        queryStr = `WHERE ${timingsString} AND ${categoriesString}`;
+      } else if (name) {
+        queryStr = `WHERE ${nameString}`;
+      } else if (timings) {
+        queryStr = `WHERE ${timingsString}`;
+      } else if (categories) {
+        queryStr = `WHERE ${categoriesString}`;
+      }
+      queryStr = `${baseString} ${queryStr} ${orderAndSortString}`;
+      console.log(queryStr);
+      return client.query(queryStr).then((res) => {
+        client.release();
+        return res.rows;
+      });
     })
     .catch((err) => {
       console.log(err);
