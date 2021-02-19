@@ -2,7 +2,6 @@ const pool = require("../db_connect");
 
 //If there is either timings or categories
 exports.fetchDates = (name, timings, categories, sorting, order) => {
-  console.log(timings, categories, sorting, order);
   const baseString =
     "SELECT * FROM dates JOIN date_timings ON dates.date_id=date_timings.date_id JOIN timings ON date_timings.timing_id=timings.timing_id JOIN date_categories ON dates.date_id=date_categories.date_id JOIN categories ON date_categories.category_id=categories.category_id ";
   const nameString = name ? `dates.date_name LIKE '%${name}%' ` : null;
