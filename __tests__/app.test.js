@@ -76,12 +76,11 @@ describe("/dates", () => {
       ).toBe(true);
     });
   });
-  it.only("GET /dates should return a 200 and a dates object with an array of dates sorted alphabetically by date name", () => {
+  it("GET /dates should return a 200 and a dates object with an array of dates sorted alphabetically by date name", () => {
     return request(app)
       .get("/api/dates")
       .expect(200)
       .then((res) => {
-        console.log(res.body.dates);
         expect(typeof res.body).toBe("object");
         expect(Array.isArray(res.body.dates)).toBe(true);
         expect(res.body.dates.length).toBeTruthy();
@@ -257,7 +256,7 @@ describe("/dates", () => {
   it("GET /dates should be able to use all of its possible queries together", () => {
     return request(app)
       .get(
-        "/api/dates?name=Go&timings=Afternoon&categories=Outdoors&sort_by=categories&order_by=DESC"
+        "/api/dates?name=go&timings=Afternoon&categories=Outdoors&sort_by=categories&order_by=DESC"
       )
       .expect(200)
       .then((res) => {
@@ -265,10 +264,16 @@ describe("/dates", () => {
         expect(
           res.body.dates.every(
             (date) =>
-              date.date_name.includes("Go") || date.date_name.includes("go")
+              (date.date_name.includes("Go") ||
+                date.date_name.includes("go")) &&
+              date.timing_id === 2 &&
+              date.category_id === 2
           )
         ).toBe(true);
         expect(res.body.dates.length).toBe(2);
+        expect(res.body.dates).toBeSortedBy("category_name", {
+          descending: true,
+        });
       });
   });
   it("GET /dates order_by query should return a 400 if an invalid order value is passed", () => {
