@@ -2,7 +2,7 @@ const express = require("express");
 var cors = require("cors");
 const app = express();
 const apiRouter = require("./routers/api.router");
-require("dotenv").config();
+
 const {
   handle404EntryNotFound,
   handle404PathNotFound,

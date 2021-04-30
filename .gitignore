@@ -1,3 +1,4 @@
 node_modules
 errors.txt
 db_connect.js
+.env
