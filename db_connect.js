@@ -7,8 +7,7 @@ const pool =
   ENV === "development"
     ? new Pool({
         // connectionString: process.env.DATABASE_URL,
-        connectionString:
-          "postgres://zevmkvyudjpark:0f3a725645461813e70a0a8c7ba234cc623e791af45b97b4a1ba34c71070a55a@ec2-52-214-38-135.eu-west-1.compute.amazonaws.com:5432/d22e7dqidakad3",
+        connectionString: process.env.DATABASE_URL,
         ssl: {
           rejectUnauthorized: false,
         },
