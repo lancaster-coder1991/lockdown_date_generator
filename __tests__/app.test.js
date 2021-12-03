@@ -260,7 +260,6 @@ describe("/dates", () => {
       )
       .expect(200)
       .then((res) => {
-        console.log(res.body.dates);
         expect(
           res.body.dates.every(
             (date) =>
@@ -274,6 +273,18 @@ describe("/dates", () => {
         expect(res.body.dates).toBeSortedBy("category_name", {
           descending: true,
         });
+      });
+  });
+  it("GET /dates should not return duplicate values", () => {
+    return request(app)
+      .get("/api/dates?timings=Morning")
+      .expect(200)
+      .then((res) => {
+        const {
+          body: { dates },
+        } = res;
+        const ids = dates.map((date) => date.date_id);
+        expect(new Set(ids).size === ids.length).toBeTruthy();
       });
   });
   it("GET /dates order_by query should return a 400 if an invalid order value is passed", () => {

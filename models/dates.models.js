@@ -43,7 +43,11 @@ exports.fetchDates = (name, timings, categories, sorting, order) => {
       console.log(queryStr);
       return client.query(queryStr).then((res) => {
         client.release();
-        return res.rows;
+        // Return without duplicates
+        return res.rows.filter(
+          (val, ind, arr) =>
+            arr.findIndex((t) => t.date_id === val.date_id) === ind
+        );
       });
     })
     .catch((err) => {
