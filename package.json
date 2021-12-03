@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "psql -f ./db/seed_test.sql && jest",
-    "start": "node listen.js"
+    "test": "psql -f ./db/seed_test.sql && connectionString=psql://george:georgescott123@localhost:5432/lockdown_dates_test jest"
   },
   "repository": {
     "type": "git",
@@ -34,6 +33,7 @@
     ]
   },
   "devDependencies": {
-    "@types/node": "^14.14.20"
+    "@types/node": "^14.14.20",
+    "jest-sorted": "^1.0.12"
   }
 }
